@@ -44,16 +44,76 @@ function Monday() {
     runFiveMiles();
     liftWeights();
   }
-//this can be further improved by making another function which changes the post-activity
-//callback, with call back
+//only works if we lift weights on Monday
+  //this can be further improved by making another function which changes the post-activity
+
 
   function exerciseRoutine(postRunActivity) {
     runFiveMiles();
     postRunActivity();
   }
-  //callback, with call back, second activity "varies" so we can use it as a variable! Literally!
+  //This is the call back!
+  // second activity "varies" so we can use it as a variable! Literally!
 
   function Monday() {
     exerciseRoutine(liftWeights); 
   }
-  //callback, with callback, with callback. Passing function to another function (without running it yet)
+  //callback. Passing function to another function (without running it yet)
+
+  //callback is using a function as an argument
+
+
+  exerciseRoutine(function() {
+    console.log('Stretch! Work that core!');
+  });
+  
+  // "Go for a five-mile run"
+  // "Stretch! Work that core!" <- anonymous inline function to allow us to do "Pilates"
+
+  exerciseRoutine(() => {
+    console.log('Stretch! Work that core!');
+  });
+  
+  // Or even shorter, concise version:
+  exerciseRoutine(() => console.log('Stretch! Work that core!'));
+
+
+  //Returning a function in a function
+  function morningRoutine(exercise) {
+    var breakfast = null;
+  
+    if (exercise === liftWeights) {
+      breakfast = 'protein bar';
+    } else if (exercise === swimFortyLaps) {
+      breakfast = 'kale smoothie';
+    } else {
+      breakfast = 'granola';
+    }
+  
+    exerciseRoutine(exercise); //call this with the exercise variable replaced with liftWeights, swimFortyLaps etc.
+  
+    // we could give this function a name if we wanted to,
+    // but since it's only available _inside_ morningRoutine(),
+    // we don't need to
+    return function() {
+      console.log(`Nom nom nom, this ${breakfast} is delicious!`);
+    }
+  }
+
+  //create a function that calls morningRoutine()
+  //this is a function expression!
+  var afterExercise = morningRoutine(liftWeights);
+
+  //call it
+  afterExercise();
+
+  //in console it would look like this
+  /* 
+  var afterExercise = morningRoutine(liftWeights); <- afterExercise works through morningRoutine(...) function
+  Go for a five-mile run <- from console.log('Go for a five-mile run');
+  Pump iron <- from from console.log('Pump iron');
+
+  afterExercise()
+  Nom nom nom, this protein bar is delicious!
+
+  */
